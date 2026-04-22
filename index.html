@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="color-scheme" content="dark"/>
+<meta name="theme-color" content="#07050f"/>
 <title>REBICONN — Innovation with Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 <style>
@@ -24,9 +26,15 @@
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
+html{
+scroll-behavior:smooth;
+background:#07050f;
+color-scheme:dark;
+}
 body{
+background:#07050f;
 background:var(–bg);
+color:#f0ebff;
 color:var(–white);
 font-family:‘Plus Jakarta Sans’,sans-serif;
 font-size:18px;
@@ -611,19 +619,122 @@ text-shadow:0 0 20px rgba(192,132,252,0.35);
 ::-webkit-scrollbar-thumb{background:var(–muted);border-radius:2px;}
 ::-webkit-scrollbar-thumb:hover{background:var(–violet);}
 
+/* ── HAMBURGER ── */
+.hamburger{
+display:none;flex-direction:column;gap:5px;
+cursor:pointer;padding:4px;background:none;border:none;
+}
+.hamburger span{
+display:block;width:24px;height:1.5px;
+background:var(–violet-bright);transition:all 0.3s;
+}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+.mobile-menu{
+display:none;
+position:fixed;top:60px;left:0;right:0;
+background:rgba(7,5,15,0.98);
+backdrop-filter:blur(20px);
+border-bottom:1px solid var(–border);
+padding:1.5rem;
+z-index:99;
+flex-direction:column;gap:0;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{
+font-family:‘JetBrains Mono’,monospace;
+font-size:0.78rem;letter-spacing:0.12em;
+color:var(–mid);text-decoration:none;
+text-transform:uppercase;
+padding:1rem 0;
+border-bottom:1px solid var(–border);
+transition:color 0.2s;
+}
+.mobile-menu a:last-child{border-bottom:none;}
+.mobile-menu a:hover{color:var(–violet-bright);}
+
 @media(max-width:900px){
-nav{padding:1rem 1.5rem;}.nav-links{display:none;}
-section,#hero,#cta,#contact,footer{padding-left:1.5rem;padding-right:1.5rem;}
-.hero-h1{font-size:3rem;}.hero-stats{flex-direction:column;width:100%;}
-.stat-item{border-right:none;border-bottom:1px solid var(–border);}
-.stat-item:last-child{border-bottom:none;}
-.problems-grid,.steps-row,.testi-grid{grid-template-columns:1fr;}
-.services-layout,.why-layout,.contact-layout{grid-template-columns:1fr;gap:2.5rem;}
-.uc-grid{grid-template-columns:1fr;}
-.form-row{grid-template-columns:1fr;}
-footer{flex-direction:column;text-align:center;}
-.cta-box{padding:3rem 1.5rem;}
+/* NAV */
+nav{padding:0.9rem 1.5rem;}
+.nav-links{display:none;}
+.nav-cta{display:none;}
+.hamburger{display:flex;}
+
+/* GLOBAL SPACING */
+section{padding:4rem 1.5rem;}
+#hero{padding:7rem 1.5rem 4rem;}
+#cta{padding:4rem 1.5rem;}
+#contact{padding:4rem 1.5rem 5rem;}
+footer{padding:2rem 1.5rem;}
 .divider{margin:0 1.5rem;}
+
+/* HERO */
+.hero-h1{font-size:clamp(2.4rem,10vw,3.2rem);line-height:0.96;}
+.hero-eyebrow{font-size:0.6rem;letter-spacing:0.2em;margin-bottom:1.2rem;}
+.hero-sub{font-size:0.92rem;margin-top:1.2rem;}
+.hero-actions{margin-top:2rem;gap:1rem;}
+.btn-filled,.btn-corner{font-size:0.7rem;padding:0.8rem 1.6rem;}
+.hero-stats{flex-direction:column;width:100%;margin-top:3rem;}
+.stat-item{border-right:none;border-bottom:1px solid var(–border);padding:1rem 1.5rem;text-align:left;}
+.stat-item:last-child{border-bottom:none;}
+.stat-num{font-size:1.8rem;}
+.hero-scroll{display:none;}
+
+/* SECTIONS */
+.s-h2{font-size:clamp(1.7rem,6vw,2.4rem);}
+.s-sub{font-size:0.88rem;}
+.s-eye{font-size:0.58rem;}
+
+/* PROBLEMS */
+.problems-grid{grid-template-columns:1fr;gap:1px;}
+.prob-card{padding:2rem 1.5rem;}
+.prob-num{font-size:2.5rem;}
+
+/* SERVICES */
+.services-layout{grid-template-columns:1fr;gap:2rem;}
+.services-list{flex-direction:row;overflow-x:auto;gap:0;padding-bottom:0.5rem;-webkit-overflow-scrolling:touch;}
+.services-list::-webkit-scrollbar{height:2px;}
+.services-list::-webkit-scrollbar-thumb{background:var(–violet);border-radius:2px;}
+.svc-tab{min-width:max-content;border-left:none;border-bottom:2px solid transparent;padding:0.8rem 1.2rem;}
+.svc-tab:hover,.svc-tab.active{border-left:none;border-bottom-color:var(–violet);}
+.svc-tab-idx{display:none;}
+.svc-tab-name{font-size:0.85rem;}
+.svc-inner{padding:2rem 1.5rem;}
+.svc-title{font-size:1.5rem;}
+
+/* HOW */
+.steps-row{grid-template-columns:1fr;gap:1px;}
+.step{padding:2rem 1.5rem;}
+.step-num{font-size:2.8rem;}
+
+/* USE CASES */
+.uc-grid{grid-template-columns:1fr;gap:1px;}
+.uc-card{padding:2rem 1.5rem;}
+
+/* WHY */
+.why-layout{grid-template-columns:1fr;gap:3rem;}
+.metrics-panel{padding:1.8rem 1.5rem;}
+.m-name{min-width:120px;font-size:0.8rem;}
+
+/* TESTIMONIALS */
+.testi-grid{grid-template-columns:1fr;gap:1px;}
+.t-card{padding:2rem 1.5rem;}
+
+/* CTA */
+.cta-box{padding:3rem 1.5rem;}
+.cta-h2{font-size:clamp(1.7rem,6vw,2.4rem);}
+.cta-actions{flex-direction:column;align-items:center;}
+
+/* CONTACT */
+.contact-layout{grid-template-columns:1fr;gap:3rem;}
+.form-row{grid-template-columns:1fr;}
+.f-submit{width:100%;text-align:center;clip-path:none;align-self:stretch;}
+
+/* FOOTER */
+footer{flex-direction:column;text-align:center;gap:1.2rem;}
+.f-links{flex-wrap:wrap;justify-content:center;gap:1.2rem;}
 }
 </style>
 
@@ -644,7 +755,21 @@ footer{flex-direction:column;text-align:center;}
     <li><a href="#contact">Contact</a></li>
   </ul>
   <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book a Demo</button>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#how" onclick="closeMenu()">Process</a>
+  <a href="#usecases" onclick="closeMenu()">Use Cases</a>
+  <a href="#why" onclick="closeMenu()">Why Us</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="#contact" onclick="closeMenu()" style="color:var(--violet-bright);margin-top:0.5rem;">Book a Demo →</a>
+</div>
 
 <!-- HERO -->
 
@@ -925,6 +1050,18 @@ window.addEventListener('scroll',()=>{
   document.querySelector('nav').style.background=
     window.scrollY>60?'rgba(7,5,15,0.98)':'rgba(7,5,15,0.82)';
 });
+
+/* ── HAMBURGER ── */
+const hbg=document.getElementById('hamburger');
+const mob=document.getElementById('mobileMenu');
+hbg.addEventListener('click',()=>{
+  hbg.classList.toggle('open');
+  mob.classList.toggle('open');
+});
+function closeMenu(){
+  hbg.classList.remove('open');
+  mob.classList.remove('open');
+}
 </script>
 
 </body>
