@@ -1,909 +1,644 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>REBICONN — Innovation with Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --black: #010a03;
-    --green: #00ff6a;
-    --green-dim: #00c44f;
-    --green-glow: rgba(0,255,106,0.15);
-    --green-faint: rgba(0,255,106,0.05);
-    --white: #e8f5ec;
-    --grey: #4a5e50;
-    --grey-light: #8fa898;
-    --card-bg: rgba(0,255,106,0.04);
-    --border: rgba(0,255,106,0.18);
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 18px;
-    overflow-x: hidden;
-  }
-
-  /* ── CANVAS BG ── */
-  #bgCanvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 0;
-    opacity: 0.45;
-    pointer-events: none;
-  }
-
-  section, nav, footer { position: relative; z-index: 1; }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.2rem 4rem;
-    background: rgba(1,10,3,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    z-index: 100;
-  }
-
-  .nav-logo {
-    font-family: 'Space Mono', monospace;
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--green);
-    letter-spacing: 0.08em;
-    text-shadow: 0 0 18px rgba(0,255,106,0.6);
-  }
-  .nav-logo span { color: var(--white); opacity: 0.5; font-size: 0.7rem; display: block; letter-spacing: 0.2em; font-weight: 400; margin-top: -2px;}
-
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--grey-light);
-    text-decoration: none;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--green); }
-
-  .nav-cta {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
-    color: var(--black);
-    background: var(--green);
-    border: none;
-    padding: 0.55rem 1.4rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-    transition: background 0.2s, box-shadow 0.2s;
-    font-weight: 700;
-  }
-  .nav-cta:hover { background: #fff; box-shadow: 0 0 20px rgba(0,255,106,0.5); }
-
-  /* ── HERO ── */
-  #hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 10rem 4rem 6rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-tag {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.3em;
-    color: var(--green);
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
-  }
-  .hero-tag::before { content: '> '; }
-
-  .hero-h1 {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: clamp(3.2rem, 7vw, 7rem);
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.01em;
-    max-width: 14ch;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.4s forwards;
-  }
-
-  .hero-h1 .accent { color: var(--green); text-shadow: 0 0 40px rgba(0,255,106,0.4); }
-
-  .hero-sub {
-    max-width: 52ch;
-    margin-top: 1.8rem;
-    color: var(--grey-light);
-    font-size: 1.15rem;
-    font-weight: 400;
-    line-height: 1.7;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.6s forwards;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 1.2rem;
-    margin-top: 2.8rem;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.8s forwards;
-  }
-
-  .btn-primary {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.08em;
-    color: var(--black);
-    background: var(--green);
-    border: none;
-    padding: 1rem 2.2rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 700;
-    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
-    transition: all 0.2s;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .btn-primary:hover { background: #fff; box-shadow: 0 0 30px rgba(0,255,106,0.5); }
-
-  .btn-ghost {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.08em;
-    color: var(--green);
-    background: transparent;
-    border: 1px solid var(--border);
-    padding: 1rem 2.2rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 400;
-    transition: all 0.2s;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .btn-ghost:hover { border-color: var(--green); background: var(--green-faint); }
-
-  .hero-stats {
-    display: flex;
-    gap: 3.5rem;
-    margin-top: 5rem;
-    opacity: 0;
-    animation: fadeUp 0.9s 1s forwards;
-  }
-  .stat-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--green);
-    text-shadow: 0 0 20px rgba(0,255,106,0.4);
-  }
-  .stat-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    color: var(--grey-light);
-    text-transform: uppercase;
-    margin-top: 0.2rem;
-  }
-
-  .hero-line {
-    position: absolute;
-    right: 4rem;
-    bottom: 3rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    opacity: 0;
-    animation: fadeUp 1s 1.2s forwards;
-  }
-  .hero-line span {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    color: var(--grey);
-    writing-mode: vertical-rl;
-    text-transform: uppercase;
-  }
-  .hero-line::after {
-    content: '';
-    width: 1px;
-    height: 60px;
-    background: linear-gradient(to bottom, var(--green), transparent);
-  }
-
-  /* ── SECTION COMMON ── */
-  section { padding: 7rem 4rem; }
-
-  .section-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.35em;
-    color: var(--green);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-  .section-label::before { content: '// '; }
-
-  .section-h2 {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: clamp(2rem, 4vw, 3.4rem);
-    font-weight: 700;
-    line-height: 1.1;
-    max-width: 20ch;
-  }
-
-  .section-sub {
-    color: var(--grey-light);
-    font-size: 1.05rem;
-    line-height: 1.8;
-    max-width: 55ch;
-    margin-top: 1rem;
-  }
-
-  /* ── DIVIDER ── */
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--border), transparent);
-    margin: 0 4rem;
-    width: calc(100% - 8rem);
-  }
-
-  /* ── PROBLEMS ── */
-  #problems { background: transparent; }
-
-  .problems-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5px;
-    margin-top: 4rem;
-    border: 1px solid var(--border);
-  }
-
-  .problem-card {
-    background: var(--card-bg);
-    padding: 2.5rem;
-    border-right: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-    transition: background 0.3s;
-  }
-  .problem-card:last-child { border-right: none; }
-  .problem-card:hover { background: rgba(0,255,106,0.08); }
-
-  .problem-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 3rem;
-    font-weight: 700;
-    color: rgba(0,255,106,0.12);
-    line-height: 1;
-    margin-bottom: 1rem;
-  }
-  .problem-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--white);
-    margin-bottom: 0.7rem;
-  }
-  .problem-desc {
-    color: var(--grey-light);
-    font-size: 0.95rem;
-    line-height: 1.7;
-  }
-  .problem-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 0%; height: 2px;
-    background: var(--green);
-    transition: width 0.4s;
-  }
-  .problem-card:hover::after { width: 100%; }
-
-  /* ── SERVICES ── */
-  #services {
-    background: linear-gradient(180deg, transparent 0%, rgba(0,255,106,0.02) 50%, transparent 100%);
-  }
-
-  .services-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 6rem;
-    margin-top: 4rem;
-    align-items: start;
-  }
-
-  .services-list { display: flex; flex-direction: column; gap: 0; }
-
-  .service-tab {
-    padding: 1.4rem 2rem;
-    border-left: 2px solid var(--border);
-    cursor: pointer;
-    transition: all 0.25s;
-    position: relative;
-  }
-  .service-tab.active,
-  .service-tab:hover {
-    border-left-color: var(--green);
-    background: var(--green-faint);
-  }
-  .service-tab-name {
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: var(--grey-light);
-    transition: color 0.25s;
-  }
-  .service-tab.active .service-tab-name,
-  .service-tab:hover .service-tab-name { color: var(--green); }
-
-  .service-detail {
-    display: none;
-    animation: fadeIn 0.4s forwards;
-  }
-  .service-detail.active { display: block; }
-
-  .service-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    filter: drop-shadow(0 0 10px rgba(0,255,106,0.4));
-  }
-  .service-detail-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: var(--white);
-  }
-  .service-detail-desc {
-    color: var(--grey-light);
-    line-height: 1.8;
-    font-size: 1rem;
-    margin-bottom: 2rem;
-  }
-  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
-  .feature-list li {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.82rem;
-    color: var(--white);
-    letter-spacing: 0.05em;
-    padding-left: 1.5rem;
-    position: relative;
-  }
-  .feature-list li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--green);
-  }
-
-  /* ── HOW IT WORKS ── */
-  #how {
-    background: var(--black);
-  }
-
-  .steps-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    margin-top: 4rem;
-    position: relative;
-  }
-
-  .steps-row::before {
-    content: '';
-    position: absolute;
-    top: 3rem;
-    left: 16.5%;
-    right: 16.5%;
-    height: 1px;
-    background: linear-gradient(to right, var(--green), var(--green-dim), var(--green));
-    opacity: 0.3;
-  }
-
-  .step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 0 2.5rem;
-    position: relative;
-  }
-
-  .step-circle {
-    width: 6rem;
-    height: 6rem;
-    border: 1px solid var(--green);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2rem;
-    position: relative;
-    background: var(--black);
-    box-shadow: 0 0 30px rgba(0,255,106,0.15), inset 0 0 30px rgba(0,255,106,0.05);
-  }
-  .step-circle::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 1px solid rgba(0,255,106,0.15);
-  }
-  .step-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--green);
-  }
-  .step-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.8rem;
-  }
-  .step-desc {
-    color: var(--grey-light);
-    font-size: 0.95rem;
-    line-height: 1.7;
-  }
-
-  /* ── USE CASES ── */
-  #usecases { background: transparent; }
-
-  .usecases-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-top: 4rem;
-  }
-
-  .usecase-card {
-    border: 1px solid var(--border);
-    padding: 2.5rem;
-    background: var(--card-bg);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s;
-    cursor: default;
-  }
-  .usecase-card:hover {
-    border-color: var(--green);
-    background: rgba(0,255,106,0.07);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(0,255,106,0.08);
-  }
-
-  .usecase-icon { font-size: 2.2rem; margin-bottom: 1.2rem; }
-  .usecase-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 0.7rem;
-    color: var(--white);
-  }
-  .usecase-desc {
-    color: var(--grey-light);
-    font-size: 0.92rem;
-    line-height: 1.75;
-  }
-  .usecase-tag {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: var(--green);
-    background: rgba(0,255,106,0.1);
-    border: 1px solid rgba(0,255,106,0.2);
-    padding: 0.25rem 0.7rem;
-    text-transform: uppercase;
-  }
-
-  /* ── WHY ── */
-  #why {
-    background: linear-gradient(180deg, transparent, rgba(0,255,106,0.025), transparent);
-  }
-
-  .why-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    margin-top: 4rem;
-    align-items: center;
-  }
-
-  .why-points { display: flex; flex-direction: column; gap: 2rem; }
-
-  .why-point {
-    display: flex;
-    gap: 1.5rem;
-    align-items: flex-start;
-  }
-  .why-dot {
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 1px solid var(--green);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 0.2rem;
-    background: var(--green-faint);
-    font-size: 1rem;
-  }
-  .why-point-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 0.3rem;
-  }
-  .why-point-desc {
-    color: var(--grey-light);
-    font-size: 0.92rem;
-    line-height: 1.7;
-  }
-
-  .why-visual {
-    position: relative;
-    border: 1px solid var(--border);
-    padding: 3rem;
-    background: var(--card-bg);
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-  }
-  .why-visual::before {
-    content: 'SYSTEM STATUS';
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    color: var(--green);
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .status-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(0,255,106,0.06);
-  }
-  .status-name {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--grey-light);
-    letter-spacing: 0.05em;
-  }
-  .status-val {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--green);
-  }
-  .status-bar-wrap {
-    flex: 1;
-    margin: 0 1.5rem;
-    height: 3px;
-    background: rgba(0,255,106,0.08);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .status-bar {
-    height: 100%;
-    background: var(--green);
-    border-radius: 2px;
-    box-shadow: 0 0 8px rgba(0,255,106,0.6);
-  }
-
-  /* ── TESTIMONIALS ── */
-  #testimonials { background: transparent; }
-
-  .testi-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 4rem;
-  }
-  .testi-card {
-    border: 1px solid var(--border);
-    padding: 2rem;
-    background: var(--card-bg);
-    position: relative;
-  }
-  .testi-card::before {
-    content: '"';
-    font-family: 'Space Mono', monospace;
-    font-size: 4rem;
-    color: var(--green);
-    opacity: 0.2;
-    line-height: 1;
-    position: absolute;
-    top: 1rem; left: 1.5rem;
-  }
-  .testi-text {
-    color: var(--grey-light);
-    font-size: 0.95rem;
-    line-height: 1.8;
-    margin-top: 1.5rem;
-    padding-top: 0.5rem;
-  }
-  .testi-author {
-    margin-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    padding-top: 1rem;
-  }
-  .testi-name {
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--white);
-  }
-  .testi-role {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.68rem;
-    color: var(--green);
-    letter-spacing: 0.1em;
-    margin-top: 0.2rem;
-  }
-
-  /* ── CTA ── */
-  #cta {
-    background: transparent;
-    text-align: center;
-    padding: 7rem 4rem;
-  }
-
-  .cta-box {
-    max-width: 800px;
-    margin: 0 auto;
-    border: 1px solid var(--border);
-    padding: 5rem 4rem;
-    background: var(--card-bg);
-    position: relative;
-    overflow: hidden;
-  }
-  .cta-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--green), transparent);
-  }
-  .cta-box::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--green), transparent);
-  }
-
-  .cta-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.35em;
-    color: var(--green);
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-  }
-  .cta-h2 {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 700;
-    line-height: 1.15;
-    margin-bottom: 1.5rem;
-  }
-  .cta-sub {
-    color: var(--grey-light);
-    font-size: 1rem;
-    line-height: 1.8;
-    margin-bottom: 2.5rem;
-    max-width: 45ch;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-
-  /* ── CONTACT FORM ── */
-  #contact { background: transparent; padding: 5rem 4rem 7rem; }
-
-  .contact-layout {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 5rem;
-    margin-top: 4rem;
-  }
-
-  .contact-info { display: flex; flex-direction: column; gap: 2rem; }
-  .contact-item-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
-    color: var(--green);
-    text-transform: uppercase;
-    margin-bottom: 0.3rem;
-  }
-  .contact-item-val {
-    font-size: 1rem;
-    color: var(--white);
-  }
-
-  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
-
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-  .form-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    color: var(--grey-light);
-    text-transform: uppercase;
-  }
-  .form-input, .form-textarea, .form-select {
-    background: rgba(0,255,106,0.03);
-    border: 1px solid var(--border);
-    color: var(--white);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1rem;
-    padding: 0.9rem 1.2rem;
-    outline: none;
-    transition: border-color 0.25s, box-shadow 0.25s;
-    width: 100%;
-  }
-  .form-input:focus, .form-textarea:focus, .form-select:focus {
-    border-color: var(--green);
-    box-shadow: 0 0 15px rgba(0,255,106,0.1);
-  }
-  .form-textarea { resize: vertical; min-height: 130px; }
-  .form-select option { background: #010a03; }
-
-  .form-submit {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.1em;
-    color: var(--black);
-    background: var(--green);
-    border: none;
-    padding: 1.1rem 2.5rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 700;
-    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
-    transition: all 0.2s;
-    align-self: flex-start;
-  }
-  .form-submit:hover { background: #fff; box-shadow: 0 0 30px rgba(0,255,106,0.5); }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 3rem 4rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-  }
-
-  .footer-logo {
-    font-family: 'Space Mono', monospace;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--green);
-    text-shadow: 0 0 15px rgba(0,255,106,0.4);
-  }
-  .footer-tagline {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    color: var(--grey);
-    margin-top: 0.3rem;
-    text-transform: uppercase;
-  }
-
-  .footer-links { display: flex; gap: 2rem; list-style: none; }
-  .footer-links a {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    color: var(--grey);
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .footer-links a:hover { color: var(--green); }
-
-  .footer-copy {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--grey);
-  }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; } to { opacity: 1; }
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s, transform 0.7s;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--black); }
-  ::-webkit-scrollbar-thumb { background: var(--grey); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--green); }
-
-  /* ── MOBILE ── */
-  @media (max-width: 900px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { display: none; }
-    section, #hero, #cta, #contact, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
-    .hero-h1 { font-size: 3rem; }
-    .problems-grid, .steps-row, .testi-grid { grid-template-columns: 1fr; }
-    .problem-card { border-right: none; border-bottom: 1px solid var(--border); }
-    .services-layout, .why-layout, .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
-    .usecases-grid { grid-template-columns: 1fr; }
-    .hero-stats { gap: 2rem; }
-    .form-row { grid-template-columns: 1fr; }
-    footer { flex-direction: column; text-align: center; }
-    .cta-box { padding: 3rem 1.5rem; }
-  }
+:root {
+  --bg:          #07050f;
+  --bg2:         #0d0a18;
+  --violet:      #a855f7;
+  --violet-bright: #c084fc;
+  --violet-lo:   rgba(168,85,247,0.1);
+  --violet-xs:   rgba(168,85,247,0.05);
+  --violet-line: rgba(168,85,247,0.18);
+  --violet-glow: rgba(168,85,247,0.35);
+  --white:       #f0ebff;
+  --muted:       #4a3f60;
+  --mid:         #8874a8;
+  --border:      rgba(168,85,247,0.14);
+  --card:        rgba(168,85,247,0.035);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+background:var(–bg);
+color:var(–white);
+font-family:‘Plus Jakarta Sans’,sans-serif;
+font-size:18px;
+overflow-x:hidden;
+}
+
+#hexCanvas{
+position:fixed;top:0;left:0;
+width:100%;height:100%;
+z-index:0;pointer-events:none;
+}
+
+/* subtle radial vignette at top for depth */
+body::after{
+content:’’;
+position:fixed;top:0;left:0;right:0;
+height:100vh;z-index:0;pointer-events:none;
+background:radial-gradient(ellipse 80% 50% at 50% -10%, rgba(168,85,247,0.07) 0%, transparent 70%);
+}
+
+section,nav,footer{position:relative;z-index:1;}
+
+/* ── BUTTONS ── */
+.btn-filled{
+position:relative;display:inline-block;
+font-family:‘JetBrains Mono’,monospace;
+font-size:0.76rem;font-weight:500;
+letter-spacing:0.13em;text-transform:uppercase;
+text-decoration:none;padding:0.9rem 2.2rem;
+background:var(–violet);color:#fff;
+border:none;cursor:pointer;
+clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+transition:all 0.25s;
+}
+.btn-filled:hover{
+background:var(–violet-bright);
+box-shadow:0 0 35px var(–violet-glow);
+transform:translateY(-1px);
+}
+
+.btn-corner{
+position:relative;display:inline-block;
+font-family:‘JetBrains Mono’,monospace;
+font-size:0.76rem;font-weight:400;
+letter-spacing:0.13em;text-transform:uppercase;
+text-decoration:none;padding:0.9rem 2.2rem;
+background:transparent;color:var(–violet);
+border:none;cursor:pointer;transition:color 0.25s;
+}
+.btn-corner::before,.btn-corner::after{
+content:’’;position:absolute;
+width:10px;height:10px;transition:all 0.3s;
+}
+.btn-corner::before{top:0;left:0;border-top:1px solid var(–violet);border-left:1px solid var(–violet);}
+.btn-corner::after{bottom:0;right:0;border-bottom:1px solid var(–violet);border-right:1px solid var(–violet);}
+.btn-corner:hover::before,.btn-corner:hover::after{width:100%;height:100%;}
+.btn-corner:hover{color:var(–white);}
+
+/* ── NAV ── */
+nav{
+position:fixed;top:0;left:0;right:0;
+display:flex;align-items:center;justify-content:space-between;
+padding:1.2rem 4rem;
+background:rgba(7,5,15,0.82);
+backdrop-filter:blur(20px);
+border-bottom:1px solid var(–border);
+z-index:100;transition:background 0.3s;
+}
+.nav-logo{
+font-family:‘Plus Jakarta Sans’,sans-serif;
+font-size:1.4rem;font-weight:800;
+letter-spacing:0.06em;color:var(–violet-bright);
+text-shadow:0 0 24px rgba(192,132,252,0.5);
+}
+.nav-logo span{
+display:block;font-family:‘JetBrains Mono’,monospace;
+font-size:0.58rem;font-weight:300;letter-spacing:0.28em;
+color:var(–muted);text-transform:uppercase;margin-top:-2px;
+}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{
+font-family:‘JetBrains Mono’,monospace;font-size:0.7rem;
+color:var(–muted);text-decoration:none;
+letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;
+}
+.nav-links a:hover{color:var(–violet-bright);}
+.nav-cta{
+font-family:‘JetBrains Mono’,monospace;font-size:0.7rem;font-weight:500;
+letter-spacing:0.12em;text-transform:uppercase;
+color:#fff;background:var(–violet);
+border:none;padding:0.55rem 1.5rem;cursor:pointer;
+clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
+transition:all 0.25s;
+}
+.nav-cta:hover{background:var(–violet-bright);box-shadow:0 0 22px var(–violet-glow);}
+
+/* ── HERO ── */
+#hero{
+min-height:100vh;display:flex;flex-direction:column;
+justify-content:center;padding:10rem 4rem 6rem;
+position:relative;overflow:hidden;
+}
+
+.hero-eyebrow{
+font-family:‘JetBrains Mono’,monospace;
+font-size:0.68rem;letter-spacing:0.35em;
+color:var(–violet-bright);text-transform:uppercase;
+margin-bottom:2rem;
+display:flex;align-items:center;gap:1rem;
+opacity:0;animation:fadeUp 0.8s 0.2s forwards;
+}
+.eyebrow-pulse{
+width:6px;height:6px;border-radius:50%;
+background:var(–violet-bright);
+box-shadow:0 0 10px var(–violet-bright);
+animation:breathe 3.5s ease-in-out infinite;
+}
+.eyebrow-dash{width:28px;height:1px;background:var(–violet);opacity:0.45;}
+
+@keyframes breathe{
+0%,100%{box-shadow:0 0 6px var(–violet-bright);opacity:1;}
+50%{box-shadow:0 0 22px var(–violet-bright),0 0 40px rgba(168,85,247,0.3);opacity:0.7;}
+}
+
+.hero-h1{
+font-family:‘Plus Jakarta Sans’,sans-serif;
+font-size:clamp(3.2rem,8vw,8.5rem);
+font-weight:800;line-height:0.94;
+letter-spacing:-0.03em;max-width:14ch;
+opacity:0;animation:fadeUp 0.9s 0.35s forwards;
+}
+.hero-h1 .hl{
+display:block;
+background:linear-gradient(135deg, var(–violet-bright) 0%, #e879f9 50%, var(–violet) 100%);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+filter:drop-shadow(0 0 30px rgba(168,85,247,0.3));
+position:relative;
+}
+.hero-h1 .hl::after{
+content:’’;position:absolute;
+bottom:2px;left:0;width:100%;height:1px;
+background:linear-gradient(to right,var(–violet),rgba(168,85,247,0.2),transparent);
+opacity:0.4;
+}
+
+.hero-sub{
+max-width:50ch;margin-top:2.2rem;
+color:var(–mid);font-size:0.98rem;
+line-height:1.9;font-weight:400;
+opacity:0;animation:fadeUp 0.9s 0.55s forwards;
+}
+
+.hero-actions{
+display:flex;gap:1.5rem;margin-top:3rem;flex-wrap:wrap;
+opacity:0;animation:fadeUp 0.9s 0.75s forwards;
+}
+
+.hero-stats{
+display:flex;width:fit-content;
+margin-top:5rem;border:1px solid var(–border);
+opacity:0;animation:fadeUp 0.9s 0.95s forwards;
+background:rgba(168,85,247,0.03);
+}
+.stat-item{
+padding:1.5rem 2.8rem;
+border-right:1px solid var(–border);
+}
+.stat-item:last-child{border-right:none;}
+.stat-num{
+font-family:‘Plus Jakarta Sans’,sans-serif;
+font-size:2.2rem;font-weight:800;
+background:linear-gradient(135deg,var(–violet-bright),#e879f9);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+line-height:1;
+}
+.stat-label{
+font-family:‘JetBrains Mono’,monospace;
+font-size:0.6rem;letter-spacing:0.18em;
+color:var(–muted);text-transform:uppercase;margin-top:0.35rem;
+}
+
+.hero-scroll{
+position:absolute;right:4rem;bottom:3rem;
+display:flex;flex-direction:column;align-items:center;gap:0.6rem;
+opacity:0;animation:fadeUp 1s 1.15s forwards;
+}
+.hero-scroll span{
+font-family:‘JetBrains Mono’,monospace;font-size:0.58rem;
+letter-spacing:0.25em;color:var(–muted);
+writing-mode:vertical-rl;text-transform:uppercase;
+}
+.hero-scroll-line{
+width:1px;height:48px;
+background:linear-gradient(to bottom,var(–violet),transparent);
+animation:scrollPulse 2.5s ease-in-out infinite;
+}
+@keyframes scrollPulse{
+0%,100%{opacity:1;transform:scaleY(1);}
+50%{opacity:0.4;transform:scaleY(0.5);}
+}
+
+/* ── DIVIDER ── */
+.divider{
+height:1px;
+background:linear-gradient(to right,transparent,var(–border),transparent);
+margin:0 4rem;
+}
+
+/* ── SECTION COMMON ── */
+section{padding:7rem 4rem;}
+
+.s-eye{
+font-family:‘JetBrains Mono’,monospace;
+font-size:0.62rem;letter-spacing:0.35em;
+color:var(–violet-bright);text-transform:uppercase;
+margin-bottom:1.2rem;
+display:flex;align-items:center;gap:0.8rem;
+}
+.s-eye::before{
+content:’’;width:18px;height:1px;
+background:var(–violet);opacity:0.5;flex-shrink:0;
+}
+
+.s-h2{
+font-family:‘Plus Jakarta Sans’,sans-serif;
+font-size:clamp(2rem,4.5vw,3.8rem);
+font-weight:800;letter-spacing:-0.025em;
+line-height:1.08;max-width:20ch;
+}
+
+.s-sub{
+color:var(–mid);font-size:0.96rem;
+line-height:1.9;max-width:52ch;
+margin-top:1rem;font-weight:400;
+}
+
+/* ── PROBLEMS ── */
+.problems-grid{
+display:grid;grid-template-columns:repeat(3,1fr);
+gap:1px;margin-top:4rem;background:var(–border);
+}
+.prob-card{
+background:var(–bg);padding:3rem 2.5rem;
+position:relative;overflow:hidden;transition:background 0.3s;
+}
+.prob-card:hover{background:var(–bg2);}
+.prob-card::after{
+content:’’;position:absolute;bottom:0;left:0;
+width:0;height:2px;
+background:linear-gradient(to right,var(–violet),var(–violet-bright));
+transition:width 0.5s;
+}
+.prob-card:hover::after{width:100%;}
+.prob-num{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:3.5rem;font-weight:800;
+background:linear-gradient(135deg,rgba(168,85,247,0.12),rgba(168,85,247,0.04));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+line-height:1;margin-bottom:1.2rem;transition:all 0.3s;
+filter:drop-shadow(0 0 0px transparent);
+}
+.prob-card:hover .prob-num{
+background:linear-gradient(135deg,rgba(168,85,247,0.28),rgba(192,132,252,0.15));
+-webkit-background-clip:text;background-clip:text;
+}
+.prob-title{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:1.15rem;font-weight:700;
+margin-bottom:0.8rem;letter-spacing:-0.01em;
+}
+.prob-desc{color:var(–mid);font-size:0.9rem;line-height:1.85;font-weight:400;}
+
+/* ── SERVICES ── */
+#services{background:linear-gradient(180deg,transparent,rgba(168,85,247,0.02) 50%,transparent);}
+.services-layout{
+display:grid;grid-template-columns:1fr 2fr;
+gap:5rem;margin-top:4rem;align-items:start;
+}
+.services-list{display:flex;flex-direction:column;gap:2px;}
+.svc-tab{
+padding:1.1rem 1.5rem;border-left:2px solid transparent;
+cursor:pointer;transition:all 0.25s;
+}
+.svc-tab:hover,.svc-tab.active{
+border-left-color:var(–violet);background:var(–violet-xs);
+}
+.svc-tab-idx{
+font-family:‘JetBrains Mono’,monospace;font-size:0.58rem;
+letter-spacing:0.15em;color:var(–violet-bright);opacity:0;
+display:block;margin-bottom:0.15rem;transition:opacity 0.25s;
+}
+.svc-tab.active .svc-tab-idx,.svc-tab:hover .svc-tab-idx{opacity:0.6;}
+.svc-tab-name{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:1rem;font-weight:600;
+color:var(–muted);transition:color 0.25s;
+}
+.svc-tab.active .svc-tab-name,.svc-tab:hover .svc-tab-name{color:var(–white);}
+
+.svc-detail{display:none;animation:fadeIn 0.4s forwards;}
+.svc-detail.active{display:block;}
+.svc-inner{
+padding:3rem;background:var(–card);position:relative;
+}
+.svc-inner::before,.svc-inner::after,.svc-inner .si-br,.svc-inner .si-bl{
+content:’’;position:absolute;width:16px;height:16px;
+}
+.svc-inner::before{top:0;left:0;border-top:1px solid var(–violet-line);border-left:1px solid var(–violet-line);}
+.svc-inner::after{top:0;right:0;border-top:1px solid var(–violet-line);border-right:1px solid var(–violet-line);}
+.svc-inner .si-br{bottom:0;right:0;border-bottom:1px solid var(–violet-line);border-right:1px solid var(–violet-line);}
+.svc-inner .si-bl{bottom:0;left:0;border-bottom:1px solid var(–violet-line);border-left:1px solid var(–violet-line);}
+.svc-icon{font-size:2.4rem;margin-bottom:1.5rem;display:block;}
+.svc-title{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:2rem;font-weight:800;
+margin-bottom:1rem;letter-spacing:-0.025em;
+}
+.svc-desc{color:var(–mid);line-height:1.85;font-size:0.93rem;margin-bottom:2rem;}
+.feat-list{list-style:none;display:flex;flex-direction:column;gap:0.85rem;}
+.feat-list li{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:0.9rem;font-weight:500;
+color:var(–white);padding-left:1.8rem;position:relative;
+}
+.feat-list li::before{
+content:‘→’;position:absolute;left:0;
+color:var(–violet-bright);font-family:‘JetBrains Mono’,monospace;font-size:0.8rem;
+}
+
+/* ── HOW ── */
+.steps-row{
+display:grid;grid-template-columns:repeat(3,1fr);
+gap:1px;margin-top:4rem;background:var(–border);
+}
+.step{
+background:var(–bg);padding:3rem 2.5rem;
+position:relative;transition:background 0.3s;
+}
+.step:hover{background:var(–bg2);}
+.step-num{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:3.8rem;font-weight:800;
+line-height:1;margin-bottom:1.5rem;
+background:linear-gradient(135deg,rgba(168,85,247,0.12),rgba(168,85,247,0.03));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+transition:all 0.3s;
+}
+.step:hover .step-num{
+background:linear-gradient(135deg,rgba(168,85,247,0.3),rgba(192,132,252,0.18));
+-webkit-background-clip:text;background-clip:text;
+}
+.step-title{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:1.3rem;font-weight:700;
+margin-bottom:0.8rem;letter-spacing:-0.01em;
+}
+.step-desc{color:var(–mid);font-size:0.9rem;line-height:1.85;}
+.step-bar{
+position:absolute;bottom:0;left:0;
+width:0;height:2px;
+background:linear-gradient(to right,var(–violet),var(–violet-bright));
+transition:width 0.5s;
+}
+.step:hover .step-bar{width:100%;}
+
+/* ── USE CASES ── */
+.uc-grid{
+display:grid;grid-template-columns:repeat(2,1fr);
+gap:1px;margin-top:4rem;background:var(–border);
+}
+.uc-card{
+background:var(–bg);padding:3rem;
+position:relative;overflow:hidden;transition:background 0.3s;
+}
+.uc-card:hover{background:var(–bg2);}
+.uc-tag{
+font-family:‘JetBrains Mono’,monospace;font-size:0.6rem;
+letter-spacing:0.2em;color:var(–violet-bright);text-transform:uppercase;
+display:block;margin-bottom:1.5rem;
+}
+.uc-icon{font-size:2rem;margin-bottom:1rem;display:block;}
+.uc-title{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:1.2rem;font-weight:700;
+margin-bottom:0.7rem;letter-spacing:-0.01em;
+}
+.uc-desc{color:var(–mid);font-size:0.9rem;line-height:1.85;}
+.uc-card::before{
+content:’’;position:absolute;
+top:-60px;right:-60px;
+width:180px;height:180px;border-radius:50%;
+background:radial-gradient(circle,rgba(168,85,247,0.06),transparent 70%);
+transition:all 0.5s;opacity:0;
+}
+.uc-card:hover::before{opacity:1;top:-40px;right:-40px;}
+
+/* ── WHY ── */
+#why{background:linear-gradient(180deg,transparent,rgba(168,85,247,0.02) 50%,transparent);}
+.why-layout{
+display:grid;grid-template-columns:1fr 1fr;
+gap:6rem;margin-top:4rem;align-items:center;
+}
+.why-points{display:flex;flex-direction:column;gap:2.2rem;}
+.why-point{display:flex;gap:1.5rem;align-items:flex-start;}
+.why-ico{
+width:2.6rem;height:2.6rem;flex-shrink:0;
+border:1px solid var(–violet-line);
+display:flex;align-items:center;justify-content:center;
+font-size:1rem;margin-top:0.1rem;
+transition:border-color 0.3s,background 0.3s,box-shadow 0.3s;
+}
+.why-point:hover .why-ico{
+border-color:var(–violet);background:var(–violet-xs);
+box-shadow:0 0 16px rgba(168,85,247,0.2);
+}
+.why-title{font-family:‘Plus Jakarta Sans’,sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:0.35rem;letter-spacing:-0.01em;}
+.why-desc{color:var(–mid);font-size:0.88rem;line-height:1.85;}
+
+.metrics-panel{
+background:var(–card);padding:2.5rem;position:relative;
+}
+.metrics-panel::before,.metrics-panel::after,
+.metrics-panel .mp-br,.metrics-panel .mp-bl{
+content:’’;position:absolute;width:16px;height:16px;
+}
+.metrics-panel::before{top:0;left:0;border-top:1px solid var(–violet-line);border-left:1px solid var(–violet-line);}
+.metrics-panel::after{top:0;right:0;border-top:1px solid var(–violet-line);border-right:1px solid var(–violet-line);}
+.metrics-panel .mp-br{bottom:0;right:0;border-bottom:1px solid var(–violet-line);border-right:1px solid var(–violet-line);}
+.metrics-panel .mp-bl{bottom:0;left:0;border-bottom:1px solid var(–violet-line);border-left:1px solid var(–violet-line);}
+.metrics-title{
+font-family:‘JetBrains Mono’,monospace;font-size:0.6rem;
+letter-spacing:0.28em;color:var(–violet-bright);
+text-transform:uppercase;margin-bottom:2rem;opacity:0.6;
+}
+.m-row{
+display:flex;align-items:center;justify-content:space-between;
+padding:0.65rem 0;border-bottom:1px solid rgba(168,85,247,0.06);
+}
+.m-row:last-child{border-bottom:none;}
+.m-name{font-family:‘Plus Jakarta Sans’,sans-serif;font-size:0.85rem;font-weight:600;color:var(–mid);min-width:155px;}
+.m-track{flex:1;margin:0 1.2rem;height:3px;background:rgba(168,85,247,0.08);overflow:hidden;}
+.m-bar{
+height:100%;
+background:linear-gradient(to right,var(–violet),var(–violet-bright));
+box-shadow:0 0 8px rgba(168,85,247,0.5);
+}
+.m-val{font-family:‘JetBrains Mono’,monospace;font-size:0.75rem;color:var(–violet-bright);min-width:38px;text-align:right;}
+
+/* ── TESTIMONIALS ── */
+.testi-grid{
+display:grid;grid-template-columns:repeat(3,1fr);
+gap:1px;margin-top:4rem;background:var(–border);
+}
+.t-card{
+background:var(–bg);padding:2.5rem;
+position:relative;transition:background 0.3s;overflow:hidden;
+}
+.t-card:hover{background:var(–bg2);}
+.t-card::before{
+content:’’;position:absolute;bottom:-40px;right:-40px;
+width:120px;height:120px;border-radius:50%;
+background:radial-gradient(circle,rgba(168,85,247,0.07),transparent 70%);
+transition:all 0.4s;
+}
+.t-card:hover::before{bottom:-20px;right:-20px;}
+.t-mark{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:4rem;font-weight:800;
+background:linear-gradient(135deg,var(–violet-bright),rgba(168,85,247,0.3));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+line-height:1;margin-bottom:0.5rem;
+}
+.t-text{color:var(–mid);font-size:0.9rem;line-height:1.9;}
+.t-author{margin-top:1.8rem;padding-top:1.2rem;border-top:1px solid var(–border);}
+.t-name{font-family:‘Plus Jakarta Sans’,sans-serif;font-weight:700;font-size:0.95rem;color:var(–white);}
+.t-role{font-family:‘JetBrains Mono’,monospace;font-size:0.62rem;color:var(–violet-bright);letter-spacing:0.08em;margin-top:0.2rem;opacity:0.7;}
+
+/* ── CTA ── */
+#cta{padding:7rem 4rem;}
+.cta-box{
+max-width:820px;margin:0 auto;
+padding:5rem 4rem;text-align:center;
+background:var(–card);position:relative;overflow:hidden;
+}
+.cta-box::before,.cta-box::after,.cta-box .cb-br,.cta-box .cb-bl{
+content:’’;position:absolute;width:24px;height:24px;
+}
+.cta-box::before{top:0;left:0;border-top:1px solid var(–violet);border-left:1px solid var(–violet);}
+.cta-box::after{top:0;right:0;border-top:1px solid var(–violet);border-right:1px solid var(–violet);}
+.cta-box .cb-br{bottom:0;right:0;border-bottom:1px solid var(–violet);border-right:1px solid var(–violet);}
+.cta-box .cb-bl{bottom:0;left:0;border-bottom:1px solid var(–violet);border-left:1px solid var(–violet);}
+.cta-glow{
+position:absolute;top:-80px;left:50%;transform:translateX(-50%);
+width:300px;height:160px;
+background:radial-gradient(ellipse,rgba(168,85,247,0.12),transparent 70%);
+pointer-events:none;
+}
+.cta-top{
+position:absolute;top:0;left:50%;transform:translateX(-50%);
+width:160px;height:1px;
+background:linear-gradient(to right,transparent,var(–violet-bright),transparent);
+}
+.cta-eye{
+font-family:‘JetBrains Mono’,monospace;font-size:0.62rem;
+letter-spacing:0.35em;color:var(–violet-bright);text-transform:uppercase;
+margin-bottom:1.5rem;opacity:0.7;
+}
+.cta-h2{
+font-family:‘Plus Jakarta Sans’,sans-serif;
+font-size:clamp(2rem,4.5vw,3.5rem);
+font-weight:800;letter-spacing:-0.025em;
+line-height:1.1;margin-bottom:1.2rem;
+}
+.cta-sub{
+color:var(–mid);font-size:0.95rem;line-height:1.9;
+margin-bottom:2.5rem;max-width:44ch;
+margin-left:auto;margin-right:auto;
+}
+.cta-actions{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;}
+
+/* ── CONTACT ── */
+#contact{padding:5rem 4rem 7rem;}
+.contact-layout{
+display:grid;grid-template-columns:1fr 1.5fr;
+gap:5rem;margin-top:4rem;align-items:start;
+}
+.contact-info{display:flex;flex-direction:column;gap:2.2rem;}
+.c-label{
+font-family:‘JetBrains Mono’,monospace;font-size:0.6rem;
+letter-spacing:0.22em;color:var(–violet-bright);
+text-transform:uppercase;margin-bottom:0.35rem;opacity:0.7;
+}
+.c-val{font-family:‘Plus Jakarta Sans’,sans-serif;font-size:1rem;font-weight:600;color:var(–white);line-height:1.6;}
+.contact-form{display:flex;flex-direction:column;gap:1.2rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-group{display:flex;flex-direction:column;gap:0.5rem;}
+.f-label{font-family:‘JetBrains Mono’,monospace;font-size:0.6rem;letter-spacing:0.18em;color:var(–muted);text-transform:uppercase;}
+.f-input,.f-textarea,.f-select{
+background:transparent;border:none;
+border-bottom:1px solid var(–border);
+color:var(–white);font-family:‘Plus Jakarta Sans’,sans-serif;
+font-size:0.95rem;font-weight:400;
+padding:0.85rem 0.1rem;outline:none;width:100%;
+transition:border-color 0.25s;
+}
+.f-input::placeholder,.f-textarea::placeholder{color:var(–muted);}
+.f-input:focus,.f-textarea:focus,.f-select:focus{
+border-bottom-color:var(–violet);
+box-shadow:0 1px 0 0 rgba(168,85,247,0.2);
+}
+.f-textarea{resize:vertical;min-height:130px;}
+.f-select option{background:#07050f;}
+.f-submit{
+font-family:‘JetBrains Mono’,monospace;font-size:0.76rem;font-weight:500;
+letter-spacing:0.13em;text-transform:uppercase;
+color:#fff;background:var(–violet);border:none;
+padding:1rem 2.5rem;cursor:pointer;
+clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+transition:all 0.25s;align-self:flex-start;
+}
+.f-submit:hover{background:var(–violet-bright);box-shadow:0 0 28px var(–violet-glow);}
+
+/* ── FOOTER ── */
+footer{
+border-top:1px solid var(–border);padding:3rem 4rem;
+display:flex;justify-content:space-between;align-items:center;
+flex-wrap:wrap;gap:1.5rem;
+}
+.f-logo{
+font-family:‘Plus Jakarta Sans’,sans-serif;font-size:1.3rem;font-weight:800;
+letter-spacing:0.05em;color:var(–violet-bright);
+text-shadow:0 0 20px rgba(192,132,252,0.35);
+}
+.f-tagline{font-family:‘JetBrains Mono’,monospace;font-size:0.58rem;letter-spacing:0.25em;color:var(–muted);text-transform:uppercase;margin-top:0.25rem;}
+.f-links{display:flex;gap:2rem;list-style:none;}
+.f-links a{font-family:‘JetBrains Mono’,monospace;font-size:0.68rem;letter-spacing:0.08em;color:var(–muted);text-decoration:none;text-transform:uppercase;transition:color 0.2s;}
+.f-links a:hover{color:var(–violet-bright);}
+.f-copy{font-family:‘JetBrains Mono’,monospace;font-size:0.6rem;letter-spacing:0.08em;color:var(–muted);}
+.f-dev{font-family:‘JetBrains Mono’,monospace;font-size:0.6rem;letter-spacing:0.08em;color:var(–muted);margin-top:0.3rem;}
+.f-dev a{color:var(–violet-bright);text-decoration:none;transition:color 0.2s;}
+.f-dev a:hover{color:#fff;text-shadow:0 0 10px rgba(192,132,252,0.6);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(–bg);}
+::-webkit-scrollbar-thumb{background:var(–muted);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(–violet);}
+
+@media(max-width:900px){
+nav{padding:1rem 1.5rem;}.nav-links{display:none;}
+section,#hero,#cta,#contact,footer{padding-left:1.5rem;padding-right:1.5rem;}
+.hero-h1{font-size:3rem;}.hero-stats{flex-direction:column;width:100%;}
+.stat-item{border-right:none;border-bottom:1px solid var(–border);}
+.stat-item:last-child{border-bottom:none;}
+.problems-grid,.steps-row,.testi-grid{grid-template-columns:1fr;}
+.services-layout,.why-layout,.contact-layout{grid-template-columns:1fr;gap:2.5rem;}
+.uc-grid{grid-template-columns:1fr;}
+.form-row{grid-template-columns:1fr;}
+footer{flex-direction:column;text-align:center;}
+.cta-box{padding:3rem 1.5rem;}
+.divider{margin:0 1.5rem;}
+}
 </style>
+
 </head>
 <body>
 
-<canvas id="bgCanvas"></canvas>
+<canvas id="hexCanvas"></canvas>
 
 <!-- NAV -->
+
 <nav>
-  <div class="nav-logo">
-    REBICONN
-    <span>Innovation with Intelligence</span>
-  </div>
+  <div class="nav-logo">REBICONN<span>Innovation with Intelligence</span></div>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
-    <li><a href="#how">How It Works</a></li>
+    <li><a href="#how">Process</a></li>
     <li><a href="#usecases">Use Cases</a></li>
     <li><a href="#why">Why Us</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -912,145 +647,63 @@
 </nav>
 
 <!-- HERO -->
+
 <section id="hero">
-  <p class="hero-tag">AI-Powered Pharma Transformation</p>
-  <h1 class="hero-h1">Pharma<br>Runs <span class="accent">Smarter</span><br>with AI</h1>
-  <p class="hero-sub">REBICONN builds intelligent automation systems, custom AI workflows, and smart applications purpose-built for the pharmaceutical industry — so your operations move at the speed of intelligence.</p>
+  <div class="hero-eyebrow">
+    <div class="eyebrow-pulse"></div>
+    <div class="eyebrow-dash"></div>
+    AI-Powered Pharma Transformation
+  </div>
+  <h1 class="hero-h1">Pharma<br><span class="hl">Runs Smarter</span><br>With AI</h1>
+  <p class="hero-sub">REBICONN builds intelligent automation systems, custom AI workflows, and precision-engineered applications purpose-built for the pharmaceutical industry.</p>
   <div class="hero-actions">
-    <a href="#contact" class="btn-primary">Book a Demo</a>
-    <a href="#services" class="btn-ghost">Explore Solutions</a>
+    <a href="#contact" class="btn-filled">Book a Demo</a>
+    <a href="#services" class="btn-corner">Explore Solutions</a>
   </div>
   <div class="hero-stats">
-    <div>
-      <div class="stat-num">10×</div>
-      <div class="stat-label">Workflow Acceleration</div>
-    </div>
-    <div>
-      <div class="stat-num">AI-First</div>
-      <div class="stat-label">Pharma Specialist</div>
-    </div>
-    <div>
-      <div class="stat-num">24/7</div>
-      <div class="stat-label">Intelligent Agents</div>
-    </div>
+    <div class="stat-item"><div class="stat-num">10×</div><div class="stat-label">Workflow Speed</div></div>
+    <div class="stat-item"><div class="stat-num">AI-First</div><div class="stat-label">Pharma Specialist</div></div>
+    <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Intelligent Agents</div></div>
   </div>
-  <div class="hero-line"><span>Scroll</span></div>
+  <div class="hero-scroll"><span>Scroll</span><div class="hero-scroll-line"></div></div>
 </section>
 
 <div class="divider"></div>
 
 <!-- PROBLEMS -->
-<section id="problems">
-  <p class="section-label reveal">The Challenge</p>
-  <h2 class="section-h2 reveal">Why Pharma Needs AI — Now</h2>
-  <p class="section-sub reveal">The pharmaceutical sector is drowning in manual processes, fragmented data, and compliance overhead. REBICONN exists to change that.</p>
 
+<section id="problems">
+  <p class="s-eye reveal">The Challenge</p>
+  <h2 class="s-h2 reveal">Why Pharma Needs AI — Now</h2>
+  <p class="s-sub reveal">The pharmaceutical sector is burdened by manual processes, fragmented data, and compliance overhead. REBICONN exists to change that.</p>
   <div class="problems-grid reveal">
-    <div class="problem-card">
-      <div class="problem-num">01</div>
-      <div class="problem-title">Manual Workflow Overload</div>
-      <div class="problem-desc">Repetitive tasks across procurement, inventory, and reporting consume thousands of hours that could be automated with AI-driven pipelines.</div>
-    </div>
-    <div class="problem-card">
-      <div class="problem-num">02</div>
-      <div class="problem-title">Fragmented Data Systems</div>
-      <div class="problem-desc">Critical data sits in silos — ERP systems, spreadsheets, and paper records — making real-time decisions nearly impossible without intelligent integration.</div>
-    </div>
-    <div class="problem-card">
-      <div class="problem-num">03</div>
-      <div class="problem-title">Slow Compliance Processes</div>
-      <div class="problem-desc">Regulatory reporting, batch tracking, and audit trails remain largely manual — expensive, error-prone, and a constant bottleneck for growth.</div>
-    </div>
+    <div class="prob-card"><div class="prob-num">01</div><div class="prob-title">Manual Workflow Overload</div><div class="prob-desc">Repetitive tasks across procurement, inventory, and reporting consume thousands of hours that intelligent automation pipelines could reclaim entirely.</div></div>
+    <div class="prob-card"><div class="prob-num">02</div><div class="prob-title">Fragmented Data Systems</div><div class="prob-desc">Critical data sits in silos — ERP systems, spreadsheets, and paper records — making real-time decisions nearly impossible without intelligent integration.</div></div>
+    <div class="prob-card"><div class="prob-num">03</div><div class="prob-title">Slow Compliance Processes</div><div class="prob-desc">Regulatory reporting, batch tracking, and audit trails remain largely manual — expensive, error-prone, and a constant bottleneck for growth.</div></div>
   </div>
 </section>
 
 <div class="divider"></div>
 
 <!-- SERVICES -->
+
 <section id="services">
-  <p class="section-label reveal">What We Build</p>
-  <h2 class="section-h2 reveal">Intelligent Solutions,<br>Built for Pharma</h2>
-
+  <p class="s-eye reveal">What We Build</p>
+  <h2 class="s-h2 reveal">Intelligent Solutions,<br>Built for Pharma</h2>
   <div class="services-layout reveal">
-    <div class="services-list" id="serviceTabs">
-      <div class="service-tab active" data-tab="0">
-        <div class="service-tab-name">AI Workflow Automation</div>
-      </div>
-      <div class="service-tab" data-tab="1">
-        <div class="service-tab-name">Custom Pharma AI Apps</div>
-      </div>
-      <div class="service-tab" data-tab="2">
-        <div class="service-tab-name">AI Agents & Chatbots</div>
-      </div>
-      <div class="service-tab" data-tab="3">
-        <div class="service-tab-name">Data Analytics & Forecasting</div>
-      </div>
-      <div class="service-tab" data-tab="4">
-        <div class="service-tab-name">Process Intelligence</div>
-      </div>
+    <div class="services-list">
+      <div class="svc-tab active" data-tab="0"><span class="svc-tab-idx">01 /</span><div class="svc-tab-name">AI Workflow Automation</div></div>
+      <div class="svc-tab" data-tab="1"><span class="svc-tab-idx">02 /</span><div class="svc-tab-name">Custom Pharma AI Apps</div></div>
+      <div class="svc-tab" data-tab="2"><span class="svc-tab-idx">03 /</span><div class="svc-tab-name">AI Agents & Chatbots</div></div>
+      <div class="svc-tab" data-tab="3"><span class="svc-tab-idx">04 /</span><div class="svc-tab-name">Data Analytics & Forecasting</div></div>
+      <div class="svc-tab" data-tab="4"><span class="svc-tab-idx">05 /</span><div class="svc-tab-name">Process Intelligence</div></div>
     </div>
-
-    <div id="serviceDetails">
-      <div class="service-detail active">
-        <div class="service-icon">⚙️</div>
-        <div class="service-detail-title">AI Workflow Automation</div>
-        <div class="service-detail-desc">Replace repetitive, error-prone manual tasks with intelligent automation pipelines that connect your systems, trigger actions, and execute decisions in real time — without human bottlenecks.</div>
-        <ul class="feature-list">
-          <li>End-to-end procurement & order automation</li>
-          <li>Inventory replenishment triggers</li>
-          <li>Document processing & data extraction</li>
-          <li>Cross-system data synchronization</li>
-          <li>Approval & compliance workflow automation</li>
-        </ul>
-      </div>
-      <div class="service-detail">
-        <div class="service-icon">📱</div>
-        <div class="service-detail-title">Custom Pharma AI Apps</div>
-        <div class="service-detail-desc">We design and build AI-powered web and mobile applications tailored specifically for pharmaceutical operations — from distribution tracking to patient-facing tools.</div>
-        <ul class="feature-list">
-          <li>Pharmacy management systems with AI insights</li>
-          <li>Drug interaction & prescription assistance apps</li>
-          <li>Sales rep AI-assistance mobile tools</li>
-          <li>Supply chain visibility platforms</li>
-          <li>Custom dashboards with predictive indicators</li>
-        </ul>
-      </div>
-      <div class="service-detail">
-        <div class="service-icon">🤖</div>
-        <div class="service-detail-title">AI Agents & Chatbots</div>
-        <div class="service-detail-desc">Deploy intelligent agents that handle customer queries, internal support, regulatory lookups, and sales assistance — available 24/7 with deep pharma domain knowledge.</div>
-        <ul class="feature-list">
-          <li>Regulatory & compliance Q&A agents</li>
-          <li>Customer service AI for distributors</li>
-          <li>Internal knowledge base bots</li>
-          <li>Sales agent AI for product recommendations</li>
-          <li>Omnichannel deployment (web, WhatsApp, Messenger)</li>
-        </ul>
-      </div>
-      <div class="service-detail">
-        <div class="service-icon">📊</div>
-        <div class="service-detail-title">Data Analytics & Forecasting</div>
-        <div class="service-detail-desc">Transform your raw pharma data into actionable intelligence. Our ML-powered forecasting models help you predict demand, reduce waste, and optimize your supply chain with precision.</div>
-        <ul class="feature-list">
-          <li>Sales demand forecasting models</li>
-          <li>Expiry & wastage prediction systems</li>
-          <li>Market trend analysis dashboards</li>
-          <li>Distribution performance analytics</li>
-          <li>Real-time KPI monitoring platforms</li>
-        </ul>
-      </div>
-      <div class="service-detail">
-        <div class="service-icon">🧠</div>
-        <div class="service-detail-title">Process Intelligence</div>
-        <div class="service-detail-desc">We analyze your existing operations, map inefficiencies, and build AI-powered systems that continuously learn and improve — turning your processes into intelligent, self-optimizing engines.</div>
-        <ul class="feature-list">
-          <li>Process audit & AI readiness assessment</li>
-          <li>Intelligent quality control monitoring</li>
-          <li>Anomaly detection in production & distribution</li>
-          <li>Continuous learning feedback loops</li>
-          <li>ROI tracking on automation impact</li>
-        </ul>
-      </div>
+    <div id="svcDetails">
+      <div class="svc-detail active"><div class="svc-inner"><div class="si-br"></div><div class="si-bl"></div><span class="svc-icon">⚙️</span><div class="svc-title">AI Workflow Automation</div><div class="svc-desc">Replace repetitive, error-prone manual tasks with intelligent automation pipelines that connect your systems, trigger actions, and execute decisions in real time.</div><ul class="feat-list"><li>End-to-end procurement & order automation</li><li>Inventory replenishment triggers</li><li>Document processing & data extraction</li><li>Cross-system data synchronization</li><li>Approval & compliance workflow automation</li></ul></div></div>
+      <div class="svc-detail"><div class="svc-inner"><div class="si-br"></div><div class="si-bl"></div><span class="svc-icon">📱</span><div class="svc-title">Custom Pharma AI Apps</div><div class="svc-desc">AI-powered web and mobile applications tailored specifically for pharmaceutical operations — from distribution tracking to patient-facing tools.</div><ul class="feat-list"><li>Pharmacy management systems with AI insights</li><li>Drug interaction & prescription assistance apps</li><li>Sales rep AI-assistance mobile tools</li><li>Supply chain visibility platforms</li><li>Custom dashboards with predictive indicators</li></ul></div></div>
+      <div class="svc-detail"><div class="svc-inner"><div class="si-br"></div><div class="si-bl"></div><span class="svc-icon">🤖</span><div class="svc-title">AI Agents & Chatbots</div><div class="svc-desc">Intelligent agents that handle queries, internal support, regulatory lookups, and sales assistance — available 24/7 with deep pharma domain knowledge.</div><ul class="feat-list"><li>Regulatory & compliance Q&A agents</li><li>Customer service AI for distributors</li><li>Internal knowledge base bots</li><li>Sales agent AI for product recommendations</li><li>Omnichannel: web, WhatsApp, Messenger</li></ul></div></div>
+      <div class="svc-detail"><div class="svc-inner"><div class="si-br"></div><div class="si-bl"></div><span class="svc-icon">📊</span><div class="svc-title">Data Analytics & Forecasting</div><div class="svc-desc">Transform raw pharma data into actionable intelligence. ML-powered forecasting models help predict demand, reduce waste, and optimize your supply chain.</div><ul class="feat-list"><li>Sales demand forecasting models</li><li>Expiry & wastage prediction systems</li><li>Market trend analysis dashboards</li><li>Distribution performance analytics</li><li>Real-time KPI monitoring platforms</li></ul></div></div>
+      <div class="svc-detail"><div class="svc-inner"><div class="si-br"></div><div class="si-bl"></div><span class="svc-icon">🧠</span><div class="svc-title">Process Intelligence</div><div class="svc-desc">We analyze operations, map inefficiencies, and build AI-powered systems that continuously learn — turning your processes into intelligent, self-optimizing engines.</div><ul class="feat-list"><li>Process audit & AI readiness assessment</li><li>Intelligent quality control monitoring</li><li>Anomaly detection in production & distribution</li><li>Continuous learning feedback loops</li><li>ROI tracking on automation impact</li></ul></div></div>
     </div>
   </div>
 </section>
@@ -1058,136 +711,57 @@
 <div class="divider"></div>
 
 <!-- HOW IT WORKS -->
-<section id="how">
-  <p class="section-label reveal">The Process</p>
-  <h2 class="section-h2 reveal">How REBICONN Delivers</h2>
-  <p class="section-sub reveal">A focused three-phase approach that moves fast and builds right.</p>
 
+<section id="how">
+  <p class="s-eye reveal">The Process</p>
+  <h2 class="s-h2 reveal">How REBICONN Delivers</h2>
+  <p class="s-sub reveal">A focused three-phase approach that moves fast and builds right.</p>
   <div class="steps-row reveal">
-    <div class="step">
-      <div class="step-circle"><span class="step-num">01</span></div>
-      <div class="step-title">Analyze</div>
-      <div class="step-desc">We deep-dive into your current operations, data infrastructure, and pain points. We map every bottleneck and design an AI intervention strategy specific to your pharma context.</div>
-    </div>
-    <div class="step">
-      <div class="step-circle"><span class="step-num">02</span></div>
-      <div class="step-title">Build</div>
-      <div class="step-desc">Our team builds intelligent systems — whether it's a custom AI app, an automation pipeline, or a predictive model — using modern AI stacks and industry-proven architecture.</div>
-    </div>
-    <div class="step">
-      <div class="step-circle"><span class="step-num">03</span></div>
-      <div class="step-title">Deploy</div>
-      <div class="step-desc">We deploy, integrate, and hand over — with full training, documentation, and ongoing support. Your team runs the system with confidence. We stay to scale it with you.</div>
-    </div>
+    <div class="step"><div class="step-num">01</div><div class="step-title">Analyze</div><div class="step-desc">We deep-dive into your operations, data infrastructure, and pain points — mapping every bottleneck and designing an AI strategy specific to your pharma context.</div><div class="step-bar"></div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-title">Build</div><div class="step-desc">Our team builds intelligent systems — automation pipelines, AI apps, or predictive models — using modern AI stacks and industry-proven architecture.</div><div class="step-bar"></div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-title">Deploy</div><div class="step-desc">We deploy, integrate, and hand over with full training and documentation. Your team runs with confidence. We stay to scale it with you.</div><div class="step-bar"></div></div>
   </div>
 </section>
 
 <div class="divider"></div>
 
 <!-- USE CASES -->
-<section id="usecases">
-  <p class="section-label reveal">Industry Fit</p>
-  <h2 class="section-h2 reveal">Built for Every Corner<br>of Pharma</h2>
-  <p class="section-sub reveal">From manufacturing floors to retail pharmacies — REBICONN's AI solutions fit every segment of the pharmaceutical value chain.</p>
 
-  <div class="usecases-grid reveal">
-    <div class="usecase-card">
-      <div class="usecase-tag">Manufacturing</div>
-      <div class="usecase-icon">🏭</div>
-      <div class="usecase-title">Drug Manufacturing</div>
-      <div class="usecase-desc">AI-powered quality monitoring, predictive maintenance, batch tracking, and compliance documentation for pharmaceutical manufacturers looking to cut costs and reduce recalls.</div>
-    </div>
-    <div class="usecase-card">
-      <div class="usecase-tag">Distribution</div>
-      <div class="usecase-icon">🚛</div>
-      <div class="usecase-title">Pharmaceutical Distribution</div>
-      <div class="usecase-desc">Intelligent route optimization, demand-based inventory allocation, and automated order management for distributors handling large SKU portfolios across multiple locations.</div>
-    </div>
-    <div class="usecase-card">
-      <div class="usecase-tag">Retail</div>
-      <div class="usecase-icon">💊</div>
-      <div class="usecase-title">Retail Pharmacy</div>
-      <div class="usecase-desc">Smart dispensing assistants, AI-powered expiry management, customer-facing chatbots, and sales intelligence tools that help pharmacies serve better and waste less.</div>
-    </div>
-    <div class="usecase-card">
-      <div class="usecase-tag">R&D</div>
-      <div class="usecase-icon">🔬</div>
-      <div class="usecase-title">Research & Development</div>
-      <div class="usecase-desc">Automated literature synthesis, clinical data processing, trial documentation workflows, and AI-assisted regulatory submission support for pharmaceutical R&D teams.</div>
-    </div>
+<section id="usecases">
+  <p class="s-eye reveal">Industry Fit</p>
+  <h2 class="s-h2 reveal">Built for Every Corner of Pharma</h2>
+  <p class="s-sub reveal">From manufacturing floors to retail pharmacies — REBICONN's AI solutions fit every segment of the pharmaceutical value chain.</p>
+  <div class="uc-grid reveal">
+    <div class="uc-card"><span class="uc-tag">// Manufacturing</span><span class="uc-icon">🏭</span><div class="uc-title">Drug Manufacturing</div><div class="uc-desc">AI-powered quality monitoring, predictive maintenance, batch tracking, and compliance documentation for manufacturers looking to cut costs and reduce recalls.</div></div>
+    <div class="uc-card"><span class="uc-tag">// Distribution</span><span class="uc-icon">🚛</span><div class="uc-title">Pharmaceutical Distribution</div><div class="uc-desc">Intelligent route optimization, demand-based inventory allocation, and automated order management for distributors handling large SKU portfolios.</div></div>
+    <div class="uc-card"><span class="uc-tag">// Retail</span><span class="uc-icon">💊</span><div class="uc-title">Retail Pharmacy</div><div class="uc-desc">Smart dispensing assistants, AI-powered expiry management, customer-facing chatbots, and sales intelligence that helps pharmacies serve better and waste less.</div></div>
+    <div class="uc-card"><span class="uc-tag">// R&D</span><span class="uc-icon">🔬</span><div class="uc-title">Research & Development</div><div class="uc-desc">Automated literature synthesis, clinical data processing, trial documentation workflows, and AI-assisted regulatory submission support for R&D teams.</div></div>
   </div>
 </section>
 
 <div class="divider"></div>
 
 <!-- WHY REBICONN -->
-<section id="why">
-  <p class="section-label reveal">The Difference</p>
-  <h2 class="section-h2 reveal">Why REBICONN?</h2>
 
+<section id="why">
+  <p class="s-eye reveal">The Difference</p>
+  <h2 class="s-h2 reveal">Why REBICONN?</h2>
   <div class="why-layout reveal">
     <div class="why-points">
-      <div class="why-point">
-        <div class="why-dot">🎯</div>
-        <div>
-          <div class="why-point-title">Pharma-Specific AI Expertise</div>
-          <div class="why-point-desc">We don't build generic software. Every system we deliver is designed around the unique workflows, regulations, and data structures of the pharmaceutical industry.</div>
-        </div>
-      </div>
-      <div class="why-point">
-        <div class="why-dot">⚡</div>
-        <div>
-          <div class="why-point-title">Rapid Deployment</div>
-          <div class="why-point-desc">Our modular AI stack means faster builds, faster deployment, and faster ROI. Most clients see live systems within weeks, not months.</div>
-        </div>
-      </div>
-      <div class="why-point">
-        <div class="why-dot">🔒</div>
-        <div>
-          <div class="why-point-title">Compliance-Aware by Design</div>
-          <div class="why-point-desc">AI systems built with regulatory awareness baked in — from audit trails to data access controls, your compliance obligations are part of the architecture.</div>
-        </div>
-      </div>
-      <div class="why-point">
-        <div class="why-dot">📈</div>
-        <div>
-          <div class="why-point-title">Scalable Infrastructure</div>
-          <div class="why-point-desc">Built on modern cloud and AI infrastructure that scales with your business — whether you're one pharmacy or a national distribution network.</div>
-        </div>
-      </div>
+      <div class="why-point"><div class="why-ico">🎯</div><div><div class="why-title">Pharma-Specific AI Expertise</div><div class="why-desc">Every system is designed around the unique workflows, regulations, and data structures of the pharmaceutical industry — not generic templates.</div></div></div>
+      <div class="why-point"><div class="why-ico">⚡</div><div><div class="why-title">Rapid Deployment</div><div class="why-desc">Our modular AI stack means faster builds and faster ROI. Most clients see live systems within weeks, not months.</div></div></div>
+      <div class="why-point"><div class="why-ico">🔒</div><div><div class="why-title">Compliance-Aware by Design</div><div class="why-desc">From audit trails to data access controls — regulatory awareness is baked into the architecture from day one.</div></div></div>
+      <div class="why-point"><div class="why-ico">📈</div><div><div class="why-title">Scalable Infrastructure</div><div class="why-desc">Modern cloud and AI infrastructure that scales — whether you're one pharmacy or a national distribution network.</div></div></div>
     </div>
-
-    <div class="why-visual">
-      <div class="status-row">
-        <span class="status-name">Workflow Automation</span>
-        <div class="status-bar-wrap"><div class="status-bar" style="width:94%"></div></div>
-        <span class="status-val">94%</span>
-      </div>
-      <div class="status-row">
-        <span class="status-name">Data Processing Speed</span>
-        <div class="status-bar-wrap"><div class="status-bar" style="width:88%"></div></div>
-        <span class="status-val">88%</span>
-      </div>
-      <div class="status-row">
-        <span class="status-name">Forecast Accuracy</span>
-        <div class="status-bar-wrap"><div class="status-bar" style="width:91%"></div></div>
-        <span class="status-val">91%</span>
-      </div>
-      <div class="status-row">
-        <span class="status-name">Cost Reduction</span>
-        <div class="status-bar-wrap"><div class="status-bar" style="width:76%"></div></div>
-        <span class="status-val">76%</span>
-      </div>
-      <div class="status-row">
-        <span class="status-name">Compliance Coverage</span>
-        <div class="status-bar-wrap"><div class="status-bar" style="width:100%"></div></div>
-        <span class="status-val">100%</span>
-      </div>
-      <div class="status-row" style="border-bottom:none;">
-        <span class="status-name">Client Satisfaction</span>
-        <div class="status-bar-wrap"><div class="status-bar" style="width:98%"></div></div>
-        <span class="status-val">98%</span>
-      </div>
+    <div class="metrics-panel">
+      <div class="mp-br"></div><div class="mp-bl"></div>
+      <div class="metrics-title">Performance Metrics</div>
+      <div class="m-row"><span class="m-name">Workflow Automation</span><div class="m-track"><div class="m-bar" style="width:94%"></div></div><span class="m-val">94%</span></div>
+      <div class="m-row"><span class="m-name">Data Processing Speed</span><div class="m-track"><div class="m-bar" style="width:88%"></div></div><span class="m-val">88%</span></div>
+      <div class="m-row"><span class="m-name">Forecast Accuracy</span><div class="m-track"><div class="m-bar" style="width:91%"></div></div><span class="m-val">91%</span></div>
+      <div class="m-row"><span class="m-name">Cost Reduction</span><div class="m-track"><div class="m-bar" style="width:76%"></div></div><span class="m-val">76%</span></div>
+      <div class="m-row"><span class="m-name">Compliance Coverage</span><div class="m-track"><div class="m-bar" style="width:100%"></div></div><span class="m-val">100%</span></div>
+      <div class="m-row"><span class="m-name">Client Satisfaction</span><div class="m-track"><div class="m-bar" style="width:98%"></div></div><span class="m-val">98%</span></div>
     </div>
   </div>
 </section>
@@ -1195,184 +769,125 @@
 <div class="divider"></div>
 
 <!-- TESTIMONIALS -->
-<section id="testimonials">
-  <p class="section-label reveal">What Clients Say</p>
-  <h2 class="section-h2 reveal">Trusted by Pharma Leaders</h2>
 
+<section id="testimonials">
+  <p class="s-eye reveal">What Clients Say</p>
+  <h2 class="s-h2 reveal">Trusted by Pharma Leaders</h2>
   <div class="testi-grid reveal">
-    <div class="testi-card">
-      <div class="testi-text">REBICONN transformed our inventory management. We went from weekly stockouts to a fully automated replenishment system that has virtually eliminated shortages across all our branches.</div>
-      <div class="testi-author">
-        <div class="testi-name">Farhan Karim</div>
-        <div class="testi-role">Operations Director · MedPlus Distribution</div>
-      </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-text">The AI sales agent they built handles over 70% of our inbound inquiries automatically. Our team now focuses on high-value relationships. Deployment was smooth and the ROI was immediate.</div>
-      <div class="testi-author">
-        <div class="testi-name">Dr. Salma Hossain</div>
-        <div class="testi-role">CEO · LifeCare Pharmaceuticals</div>
-      </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-text">What impressed us most was how quickly REBICONN understood our compliance requirements. The system they built doesn't just automate — it keeps us audit-ready at all times.</div>
-      <div class="testi-author">
-        <div class="testi-name">Tanvir Ahmed</div>
-        <div class="testi-role">Head of Compliance · NovaMed Labs</div>
-      </div>
-    </div>
+    <div class="t-card"><div class="t-mark">"</div><div class="t-text">REBICONN transformed our inventory management. We went from weekly stockouts to a fully automated replenishment system that has virtually eliminated shortages across all our branches.</div><div class="t-author"><div class="t-name">Farhan Karim</div><div class="t-role">Operations Director · MedPlus Distribution</div></div></div>
+    <div class="t-card"><div class="t-mark">"</div><div class="t-text">The AI sales agent they built handles over 70% of our inbound inquiries automatically. Our team now focuses on high-value relationships. The ROI was immediate.</div><div class="t-author"><div class="t-name">Dr. Salma Hossain</div><div class="t-role">CEO · LifeCare Pharmaceuticals</div></div></div>
+    <div class="t-card"><div class="t-mark">"</div><div class="t-text">What impressed us most was how quickly REBICONN understood our compliance requirements. The system doesn't just automate — it keeps us audit-ready at all times.</div><div class="t-author"><div class="t-name">Tanvir Ahmed</div><div class="t-role">Head of Compliance · NovaMed Labs</div></div></div>
   </div>
 </section>
 
 <div class="divider"></div>
 
 <!-- CTA -->
+
 <section id="cta">
   <div class="cta-box reveal">
-    <p class="cta-label">// Get Started</p>
-    <h2 class="cta-h2">Ready to Automate<br>Your Pharma Operations?</h2>
+    <div class="cta-glow"></div><div class="cta-top"></div>
+    <div class="cb-br"></div><div class="cb-bl"></div>
+    <div class="cta-eye">// Get Started</div>
+    <h2 class="cta-h2">Ready to Automate Your<br>Pharma Operations?</h2>
     <p class="cta-sub">Book a free strategy session with REBICONN. We'll map your biggest automation opportunities and show you what's possible.</p>
     <div class="cta-actions">
-      <a href="#contact" class="btn-primary">Book a Free Demo</a>
-      <a href="#services" class="btn-ghost">Explore Solutions</a>
+      <a href="#contact" class="btn-filled">Book a Free Demo</a>
+      <a href="#services" class="btn-corner">Explore Solutions</a>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact">
-  <p class="section-label reveal">Get in Touch</p>
-  <h2 class="section-h2 reveal">Let's Build Something<br>Intelligent Together</h2>
 
+<section id="contact">
+  <p class="s-eye reveal">Get in Touch</p>
+  <h2 class="s-h2 reveal">Let's Build Something<br>Intelligent Together</h2>
   <div class="contact-layout reveal">
     <div class="contact-info">
-      <div>
-        <div class="contact-item-label">Email</div>
-        <div class="contact-item-val">hello@rebiconn.com</div>
-      </div>
-      <div>
-        <div class="contact-item-label">WhatsApp</div>
-        <div class="contact-item-val">+880 1XXX-XXXXXX</div>
-      </div>
-      <div>
-        <div class="contact-item-label">Response Time</div>
-        <div class="contact-item-val">Within 24 hours</div>
-      </div>
-      <div>
-        <div class="contact-item-label">Services</div>
-        <div class="contact-item-val">AI Automation · Custom Apps<br>AI Agents · Analytics</div>
-      </div>
+      <div><div class="c-label">Email</div><div class="c-val">hello@rebiconn.com</div></div>
+      <div><div class="c-label">WhatsApp</div><div class="c-val">+880 1XXX-XXXXXX</div></div>
+      <div><div class="c-label">Response Time</div><div class="c-val">Within 24 hours</div></div>
+      <div><div class="c-label">Services</div><div class="c-val">AI Automation · Custom Apps<br>AI Agents · Analytics</div></div>
     </div>
-
     <form class="contact-form" onsubmit="handleSubmit(event)">
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <input type="text" class="form-input" placeholder="Your name" required/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Company</label>
-          <input type="text" class="form-input" placeholder="Company name"/>
-        </div>
+        <div class="form-group"><label class="f-label">Full Name</label><input type="text" class="f-input" placeholder="Your name" required/></div>
+        <div class="form-group"><label class="f-label">Company</label><input type="text" class="f-input" placeholder="Company name"/></div>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-input" placeholder="info@rebiconn.com" required/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Phone</label>
-          <input type="tel" class="form-input" placeholder="+880 ..."/>
-        </div>
+        <div class="form-group"><label class="f-label">Email</label><input type="email" class="f-input" placeholder="you@company.com" required/></div>
+        <div class="form-group"><label class="f-label">Phone</label><input type="tel" class="f-input" placeholder="+880 ..."/></div>
       </div>
       <div class="form-group">
-        <label class="form-label">Interested In</label>
-        <select class="form-select form-input">
-          <option value="">Select a service...</option>
-          <option>AI Workflow Automation</option>
-          <option>Custom Pharma AI App</option>
-          <option>AI Agents & Chatbots</option>
-          <option>Data Analytics & Forecasting</option>
-          <option>Full Digital Transformation</option>
-        </select>
+        <label class="f-label">Interested In</label>
+        <select class="f-select"><option value="">Select a service...</option><option>AI Workflow Automation</option><option>Custom Pharma AI App</option><option>AI Agents & Chatbots</option><option>Data Analytics & Forecasting</option><option>Full Digital Transformation</option></select>
       </div>
       <div class="form-group">
-        <label class="form-label">Tell Us About Your Challenge</label>
-        <textarea class="form-textarea" placeholder="Describe your current pain points or what you'd like to automate..."></textarea>
+        <label class="f-label">Tell Us About Your Challenge</label>
+        <textarea class="f-textarea" placeholder="Describe your current pain points or what you'd like to automate..."></textarea>
       </div>
-      <button type="submit" class="form-submit">Send Message →</button>
+      <button type="submit" class="f-submit">Send Message →</button>
     </form>
   </div>
 </section>
 
 <!-- FOOTER -->
+
 <footer>
-  <div>
-    <div class="footer-logo">REBICONN</div>
-    <div class="footer-tagline">Innovation with Intelligence</div>
-  </div>
-  <ul class="footer-links">
+  <div><div class="f-logo">REBICONN</div><div class="f-tagline">Innovation with Intelligence</div></div>
+  <ul class="f-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#how">Process</a></li>
     <li><a href="#usecases">Use Cases</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <div class="footer-copy">© 2026 REBICONN. All rights reserved.</div>
+  <div class="f-copy">© 2026 REBICONN. All rights reserved.</div>
+  <div class="f-dev">This site is developed by <a href="https://rezoansultan.com" target="_blank" rel="noopener">Rezoan Sultan</a></div>
 </footer>
 
 <script>
-// ── PARTICLE NETWORK ──
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-let W, H, nodes = [];
+/* ── HEX GRID ── */
+const C=document.getElementById('hexCanvas');
+const X=C.getContext('2d');
+let W,H,tick=0;
+const S=36,HW=S*Math.sqrt(3),HH=S*2;
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
+function resize(){W=C.width=window.innerWidth;H=C.height=window.innerHeight;}
 resize();
-window.addEventListener('resize', resize);
+window.addEventListener('resize',resize);
 
-function createNodes() {
-  nodes = [];
-  const count = Math.floor((W * H) / 14000);
-  for (let i = 0; i < count; i++) {
-    nodes.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      r: Math.random() * 1.5 + 0.5
-    });
+function hex(cx,cy,s){
+  X.beginPath();
+  for(let i=0;i<6;i++){
+    const a=Math.PI/180*(60*i-30);
+    i===0?X.moveTo(cx+s*Math.cos(a),cy+s*Math.sin(a))
+         :X.lineTo(cx+s*Math.cos(a),cy+s*Math.sin(a));
   }
+  X.closePath();
 }
-createNodes();
 
-function draw() {
-  ctx.clearRect(0, 0, W, H);
-  for (let i = 0; i < nodes.length; i++) {
-    const n = nodes[i];
-    n.x += n.vx;
-    n.y += n.vy;
-    if (n.x < 0 || n.x > W) n.vx *= -1;
-    if (n.y < 0 || n.y > H) n.vy *= -1;
-
-    ctx.beginPath();
-    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0,255,106,0.6)';
-    ctx.fill();
-
-    for (let j = i + 1; j < nodes.length; j++) {
-      const m = nodes[j];
-      const dx = n.x - m.x, dy = n.y - m.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 130) {
-        ctx.beginPath();
-        ctx.moveTo(n.x, n.y);
-        ctx.lineTo(m.x, m.y);
-        ctx.strokeStyle = `rgba(0,255,106,${0.12 * (1 - dist / 130)})`;
-        ctx.lineWidth = 0.6;
-        ctx.stroke();
+function draw(){
+  X.clearRect(0,0,W,H);
+  tick+=0.0025;
+  const cols=Math.ceil(W/HW)+2;
+  const rows=Math.ceil(H/(HH*0.75))+2;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const ox=(r%2===0)?0:HW/2;
+      const cx=c*HW+ox-HW;
+      const cy=r*(HH*0.75)-HH*0.5;
+      const phase=c*0.28+r*0.48;
+      const pulse=(Math.sin(tick+phase)*0.5+0.5);
+      const alpha=0.032+((pulse>0.8)?(pulse-0.8)*0.65:0);
+      hex(cx,cy,S-1);
+      X.strokeStyle=`rgba(168,85,247,${alpha})`;
+      X.lineWidth=0.55;
+      X.stroke();
+      if(pulse>0.96){
+        hex(cx,cy,S-1);
+        X.fillStyle=`rgba(168,85,247,${(pulse-0.96)*0.5})`;
+        X.fill();
       }
     }
   }
@@ -1380,45 +895,37 @@ function draw() {
 }
 draw();
 
-// ── SCROLL REVEAL ──
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-reveals.forEach(el => observer.observe(el));
+/* ── REVEAL ── */
+const obs=new IntersectionObserver(e=>{
+  e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-// ── SERVICE TABS ──
-const tabs = document.querySelectorAll('.service-tab');
-const details = document.querySelectorAll('.service-detail');
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    details.forEach(d => d.classList.remove('active'));
-    tab.classList.add('active');
-    details[+tab.dataset.tab].classList.add('active');
-  });
-});
+/* ── TABS ── */
+const tabs=document.querySelectorAll('.svc-tab');
+const dets=document.querySelectorAll('.svc-detail');
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  tabs.forEach(x=>x.classList.remove('active'));
+  dets.forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  dets[+t.dataset.tab].classList.add('active');
+}));
 
-// ── FORM SUBMIT ──
-function handleSubmit(e) {
+/* ── FORM ── */
+function handleSubmit(e){
   e.preventDefault();
-  const btn = e.target.querySelector('.form-submit');
-  btn.textContent = 'Message Sent ✓';
-  btn.style.background = '#00ff6a';
-  btn.style.cursor = 'default';
-  setTimeout(() => {
-    btn.textContent = 'Send Message →';
-    btn.style.background = '';
-    btn.style.cursor = '';
-    e.target.reset();
-  }, 3000);
+  const b=e.target.querySelector('.f-submit');
+  b.textContent='✓ Message Sent';
+  b.style.background='#a855f7';b.style.cursor='default';
+  setTimeout(()=>{b.textContent='Send Message →';b.style.background='';b.style.cursor='';e.target.reset();},3000);
 }
 
-// ── NAV SCROLL EFFECT ──
-window.addEventListener('scroll', () => {
-  const nav = document.querySelector('nav');
-  nav.style.background = window.scrollY > 50 ? 'rgba(1,10,3,0.97)' : 'rgba(1,10,3,0.85)';
+/* ── NAV ── */
+window.addEventListener('scroll',()=>{
+  document.querySelector('nav').style.background=
+    window.scrollY>60?'rgba(7,5,15,0.98)':'rgba(7,5,15,0.82)';
 });
 </script>
+
 </body>
 </html>
