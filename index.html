@@ -209,16 +209,16 @@
     .trust { background: var(--white); padding: 36px 0 52px; }
     .trust__label {
       text-align: center; font-family: var(--mono); font-size: 10px;
-      letter-spacing: 2px; color: var(--muted); margin-bottom: 24px; text-transform: uppercase;
+      letter-spacing: 2px; color: var(--wire); margin-bottom: 24px; text-transform: uppercase;
     }
     .trust__logos { display: flex; align-items: center; justify-content: center; gap: 44px; flex-wrap: wrap; }
     .trust__item {
-      font-family: var(--display); font-size: 13px; font-weight: 600;
-      color: #C8CDD8; display: flex; align-items: center; gap: 6px;
-      opacity: .7; transition: opacity .25s;
+      font-family: var(--display); font-size: 14px; font-weight: 700;
+      color: var(--dark); display: flex; align-items: center; gap: 6px;
+      opacity: .85; transition: opacity .25s;
     }
-    .trust__item:hover { opacity: 1; }
-    .trust__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--wire); }
+    .trust__item:hover { opacity: 1; color: var(--wire); }
+    .trust__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--wire); }
 
     /* ── 2-COL SPLIT ───────────────────────────── */
     .split { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
@@ -905,13 +905,13 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
         <div style="padding:36px;background:var(--white);border-radius:8px;border:1px solid #E2E2DC" class="rv d1">
           <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--wire);letter-spacing:2px;margin-bottom:14px">MISSION</div>
-          <h3 style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;margin-bottom:10px;color:var(--dark)">Make AI Indispensable to Pharma</h3>
-          <p style="font-size:13px;color:var(--muted);line-height:1.8">We build AI tools so well-integrated into pharma workflows that going back to manual processes becomes unthinkable. Our products don't just automate — they elevate every decision they touch.</p>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;margin-bottom:10px;color:var(--dark)">Make AI Indispensable to Healthcare</h3>
+          <p style="font-size:13px;color:var(--muted);line-height:1.8">We build AI tools so well-integrated into healthcare workflows that going back to manual processes becomes unthinkable. Our products don't just automate — they elevate every decision they touch.</p>
         </div>
         <div style="padding:36px;background:var(--white);border-radius:8px;border:1px solid #E2E2DC" class="rv d2">
           <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--wire);letter-spacing:2px;margin-bottom:14px">VISION</div>
-          <h3 style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;margin-bottom:10px;color:var(--dark)">A Global AI Platform for Pharma</h3>
-          <p style="font-size:13px;color:var(--muted);line-height:1.8">Starting from Bangladesh, scaling globally. We see Rebiconn as the defining AI infrastructure layer for international pharmaceutical companies — from South Asia to North America and beyond.</p>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;margin-bottom:10px;color:var(--dark)">A Global AI Platform for Healthcare</h3>
+          <p style="font-size:13px;color:var(--muted);line-height:1.8">Scaling globally from day one. We see Rebiconn as the defining AI infrastructure layer for healthcare organizations worldwide — empowering hospitals, clinics, and health tech companies to operate smarter.</p>
         </div>
       </div>
     </div>
@@ -925,7 +925,7 @@
       </div>
       <div class="cta-row__div"></div>
       <div class="rv d2">
-        <p style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">Stay Ahead of Pharma AI</p>
+        <p style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">Stay Ahead with Healthcare AI</p>
         <div class="nl"><input type="email" placeholder="your@email.com"><button>Subscribe</button></div>
       </div>
     </div>
@@ -1165,7 +1165,13 @@
       </div>
       <div class="cta-row__div"></div>
       <div class="rv d2">
-        <p style="font-size:14px;color:var(--muted);line-height:1.85">Custom deployments available. All products can be white-labeled and adapted for your healthcare organization's specific workflows and data infrastructure.</p>
+        <div style="background:linear-gradient(135deg,#0d1420 0%,#1a2035 100%);border:1px solid rgba(255,85,0,.35);border-radius:10px;padding:28px 32px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;right:0;width:120px;height:120px;background:radial-gradient(circle,rgba(255,85,0,.18) 0%,transparent 70%);pointer-events:none"></div>
+          <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--wire);text-transform:uppercase;margin-bottom:12px">White-Label &amp; Custom Deploy</div>
+          <p style="font-size:15px;color:#fff;font-weight:600;line-height:1.6;margin-bottom:16px">Every product can be fully white-labeled and tailored to your organization's workflows.</p>
+          <p style="font-size:13px;color:#9AAABF;line-height:1.75;margin-bottom:20px">Custom integrations, branded interfaces, and dedicated data infrastructure — built to fit your existing systems, not the other way around.</p>
+          <span onclick="go('contact')" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:var(--wire);color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;padding:10px 20px;border-radius:5px;transition:background .2s" onmouseover="this.style.background='#e04800'" onmouseout="this.style.background='#FF5500'">Book a Demo &rarr;</span>
+        </div>
       </div>
     </div>
   </div>
