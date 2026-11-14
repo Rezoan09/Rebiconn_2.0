@@ -115,8 +115,8 @@
     /* ── HERO ──────────────────────────────────── */
     .hero {
       position: relative; overflow: hidden;
-      min-height: 100vh; display: flex; align-items: flex-end; padding-bottom: 90px;
-      padding-top: var(--nav-h);
+      min-height: 100vh; display: flex; align-items: center; padding-bottom: 90px;
+      padding-top: calc(var(--nav-h) + 60px);
       background: linear-gradient(140deg, #060810 0%, #0e1b3c 55%, #080c18 100%);
       clip-path: polygon(0 0,100% 0,100% 91%,0 100%);
       margin-bottom: -52px;
@@ -132,9 +132,9 @@
       background: linear-gradient(to right, rgba(6,8,16,.88) 40%, rgba(6,8,16,.35) 100%);
     }
     /* circuit traces top-right */
-    .c-svg { position: absolute; pointer-events: none; }
-    .c-svg--tr { top: 0; right: 0; width: 300px; height: 300px; }
-    .c-svg--bl { bottom: 60px; left: 0; width: 240px; height: 240px; }
+    .c-svg { position: absolute; pointer-events: none; overflow: hidden; }
+    .c-svg--tr { top: 0; right: 0; width: min(300px, 50vw); height: min(300px, 50vw); }
+    .c-svg--bl { bottom: 60px; left: 0; width: min(240px, 40vw); height: min(240px, 40vw); }
     .c-path {
       stroke-dasharray: 500;
       stroke-dashoffset: 500;
@@ -516,6 +516,8 @@
       .sol-grid { grid-template-columns: 1fr; }
       .stats { grid-template-columns: repeat(2,1fr); }
       .split { grid-template-columns: 1fr; gap: 36px; }
+      .mv-grid { grid-template-columns: 1fr !important; }
+      .hero { align-items: flex-start; padding-top: calc(var(--nav-h) + 32px); padding-bottom: 60px; min-height: 90vh; }
       .prod { grid-template-columns: 1fr; gap: 36px; }
       .prod--flip .prod__vis { order: 0; }
       .cnt-layout { grid-template-columns: 1fr; }
@@ -902,7 +904,7 @@
         <div class="eyebrow" style="justify-content:center"><i></i>Mission &amp; Vision<i></i></div>
         <h2 class="s-title">Where We're Going</h2>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="mv-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
         <div style="padding:36px;background:var(--white);border-radius:8px;border:1px solid #E2E2DC" class="rv d1">
           <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--wire);letter-spacing:2px;margin-bottom:14px">MISSION</div>
           <h3 style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;margin-bottom:10px;color:var(--dark)">Make AI Indispensable to Healthcare</h3>
